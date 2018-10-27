@@ -1,11 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import fire from './config/Fire';
+import Login from './Login';
+import Home from './Home';
+//import logo from './logo.svg';
+//import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = ({
+      user: null,
+    });
+    this.authListener = this.authListener.bind(this);
+  }
+
+  componentDidMount(){
+    this.authListener();
+  }
+
+  authListener() {
+    fire.auth().onAuthStateChanged((user) => {
+      if(user) {
+        this.setState({user});
+      }else{
+        this.setState({user : null});
+      }
+    })
+  }
+
   render() {
     return (
-      <div className="App">
+      <div>
+    {this.state.user ? (<Home />) : (<Login />)}
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+/*<div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
@@ -20,9 +55,4 @@ class App extends Component {
             Learn React
           </a>
         </header>
-      </div>
-    );
-  }
-}
-
-export default App;
+</div>*/
